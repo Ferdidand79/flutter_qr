@@ -17,9 +17,15 @@ class _HomeScanQRState extends State<HomeScanQR> {
   late String respuesta;
 
   @override
-  initState(){
+  initState() {
     super.initState();
     this._outputController = new TextEditingController();
+    //this.qrValue;
+
+    print("==============initdState===============");
+    print("este es el valor obtenido de qrValue es: " +
+        qrValue); //para inspeccion
+    print("=======================================");
   }
 
   Future scanQr() async {
@@ -28,10 +34,20 @@ class _HomeScanQRState extends State<HomeScanQR> {
     if (camaraStatus.isGranted) {
       String? camaraScanResult =
           await scanner.scan(); //para manejar valores nulos
-      qrValue = camaraScanResult!;
+      setState(() {//sin esto solo funciona la caja con respuesta
+        qrValue = camaraScanResult!;
+        respuesta = camaraScanResult;        
+      });          
+
+      this._outputController.text = camaraScanResult!;
+
       print("=============================");
       print("este es el valor obtenido de qrValue es: " +
           qrValue); //para inspeccion
+      print("=============================");
+
+      print("este es el valor obtenido de respuesta es: " +
+          respuesta); //para inspeccion
       print("=============================");
     } else {
       var isGrant = await Permission.camera.request();
@@ -39,10 +55,17 @@ class _HomeScanQRState extends State<HomeScanQR> {
       if (isGrant.isGranted) {
         String? camaraScanResult =
             await scanner.scan(); //para manejar valores nulos
+        setState(() {//sin esto solo funciona la caja con respuesta
         qrValue = camaraScanResult!;
+        respuesta = camaraScanResult;        
+        });
+        this._outputController.text = camaraScanResult!;
         print("=============================");
         print("este es el valor obtenido de qrValue es: " +
             qrValue); //para inspeccion
+        print("=============================");
+        print("este es el valor obtenido de respuesta es: " +
+            respuesta); //para inspeccion
         print("=============================");
       }
     }
@@ -60,41 +83,54 @@ class _HomeScanQRState extends State<HomeScanQR> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
+            //--IMAGEN SUSPERIOR--//
+            SizedBox(
               height: 210,
               width: 210,
-              child: Image.asset("assets/images/qr.png",
-              fit: BoxFit.cover,),
+              child: Image.asset(
+                "assets/images/qr.png",
+                fit: BoxFit.cover,
+              ),
             ),
+
+            //--CUADRO DE TEXTO--//
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 35, horizontal:45),
-              child: TextField( //https://programmerclick.com/article/2173416205/
+              padding: EdgeInsets.symmetric(vertical: 35, horizontal: 45),
+              child: TextField(
+                //https://programmerclick.com/article/2173416205/
                 enabled: false,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
                 //focusNode: ,
                 decoration: InputDecoration(
                   //hintText: "ingrese el nombre"
                   /// El mensaje en el cuadro de entrada se muestra cuando el cuadro de entrada no se enfoca
                   labelText: "Datos iderntificados",
                   labelStyle: TextStyle(color: Colors.blue),
+
                   /// Texto que se muestra debajo del cuadro de entrada
                   helperText: "esto se rescato del Qr",
                   helperStyle: TextStyle(color: Colors.green),
+
                   /// Texto que se muestra debajo del cuadro de entrada
                   errorText: "No llego valor",
                   errorStyle: TextStyle(color: Colors.red),
+
                   /// El cuadro de entrada solo se mostrará cuando se adquiera el foco.
-                  prefixText: "prefix",
-                  prefixStyle: TextStyle(color: Colors.deepPurple),
+                  //prefixText: "prefix",
+                  //prefixStyle: TextStyle(color: Colors.deepPurple),
                   /// El cuadro de entrada solo se mostrará cuando se adquiera el foco. Detrás del texto de entrada
-                  suffixText: "suf ",
-                  suffixStyle: TextStyle(color: Colors.black),
+                  //suffixText: "suf ",
+                  //suffixStyle: TextStyle(color: Colors.black),
                   /// El texto que se muestra en la esquina inferior derecha del cuadro de entrada de texto
                   counterText: "count",
                   counterStyle: TextStyle(color: Colors.deepPurple[800]),
+
                   /// El pequeño icono antes de ingresar texto
-                  prefixIcon: Icon(Icons.phone),
+                  prefixIcon: Icon(Icons.car_rental_outlined),
+
                   /// El pequeño icono detrás del texto de entrada
-                  suffixIcon: Icon(Icons.close),
+                  //suffixIcon: Icon(Icons.car_repair),
 
                   /// UnderlineInputBorder solo tiene el borde inferior El valor predeterminado es el borde inferior
                   border: OutlineInputBorder(
@@ -114,7 +150,6 @@ class _HomeScanQRState extends State<HomeScanQR> {
                     ),
                   ),
 
-
                   disabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     borderSide: BorderSide(
@@ -124,22 +159,29 @@ class _HomeScanQRState extends State<HomeScanQR> {
                   ),
 
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    borderSide: BorderSide(
-                      color: Colors.green,
-                      width: 2.0,
-                    )
-                  ),
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      borderSide: BorderSide(
+                        color: Colors.green,
+                        width: 2.0,
+                      )),
                 ),
+                obscureText: false,
+                //value: respuesta ?? '',
+                onChanged: (value) {
+                  respuesta = value;
+                },
+                controller: _outputController,
               ),
             ),
+
+            //--TEXTO INICIAL--//
             Container(
-              margin: const EdgeInsets.only(
-              right: 0, top: 50, left: 0, bottom: 0),
+              margin:
+                  const EdgeInsets.only(right: 45, top: 0, left: 45, bottom: 0),
               child: Text(
-                qrValue,
-                textAlign: TextAlign.center,
-                style: TextStyle(
+                "texto: " + qrValue,
+                textAlign: TextAlign.justify,
+                style: const TextStyle(
                   fontSize: 18,
                 ),
               ),
@@ -147,10 +189,12 @@ class _HomeScanQRState extends State<HomeScanQR> {
           ],
         ),
       ),
+
+      //--BOTON FLOTANTE--//
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
         onPressed: () => scanQr(),
-        child: Icon(Icons.camera),
+        child: const Icon(Icons.camera),
       ),
     );
   }
