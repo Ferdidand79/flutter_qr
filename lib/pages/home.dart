@@ -1,5 +1,6 @@
 //import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_qr/widget/flatButton_style.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:permission_handler/permission_handler.dart';
 
@@ -34,10 +35,11 @@ class _HomeScanQRState extends State<HomeScanQR> {
     if (camaraStatus.isGranted) {
       String? camaraScanResult =
           await scanner.scan(); //para manejar valores nulos
-      setState(() {//sin esto solo funciona la caja con respuesta
+      setState(() {
+        //sin esto solo funciona la caja con respuesta
         qrValue = camaraScanResult!;
-        respuesta = camaraScanResult;        
-      });          
+        respuesta = camaraScanResult;
+      });
 
       this._outputController.text = camaraScanResult!;
 
@@ -55,9 +57,10 @@ class _HomeScanQRState extends State<HomeScanQR> {
       if (isGrant.isGranted) {
         String? camaraScanResult =
             await scanner.scan(); //para manejar valores nulos
-        setState(() {//sin esto solo funciona la caja con respuesta
-        qrValue = camaraScanResult!;
-        respuesta = camaraScanResult;        
+        setState(() {
+          //sin esto solo funciona la caja con respuesta
+          qrValue = camaraScanResult!;
+          respuesta = camaraScanResult;
         });
         this._outputController.text = camaraScanResult!;
         print("=============================");
@@ -76,7 +79,7 @@ class _HomeScanQRState extends State<HomeScanQR> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red,
-        title: Text('Qr Sacan'),
+        title: const Text('Qr Sacan'),
       ),
       body: Center(
         child: Column(
@@ -87,9 +90,12 @@ class _HomeScanQRState extends State<HomeScanQR> {
             SizedBox(
               height: 210,
               width: 210,
-              child: Image.asset(
-                "assets/images/qr.png",
-                fit: BoxFit.cover,
+              child: GestureDetector(
+                child: Image.asset(
+                  "assets/images/qr.png",
+                  fit: BoxFit.cover,
+                ),
+                onTap: () => scanQr(),
               ),
             ),
 
@@ -186,6 +192,30 @@ class _HomeScanQRState extends State<HomeScanQR> {
                 ),
               ),
             ),
+
+            Container(
+              margin: const EdgeInsets.only(right: 0, top: 10, left: 0, bottom: 0),
+              child: TextButton(
+                onPressed: () {
+                  setState(() {
+                    _outputController.clear();
+                    qrValue = "Datos identificados";
+                  });
+                  /*Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return HomeScanQR();
+                  }));*/
+                },
+                style: flatButtonStyle,
+                /*shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                  side: BorderSide(color: Colors.red, width: 2),
+                ),
+                color: Colors.transparent,*/
+                child: Text("borrar"),
+                //textColor: Colors.red,
+              ),
+            ),
           ],
         ),
       ),
@@ -194,7 +224,7 @@ class _HomeScanQRState extends State<HomeScanQR> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
         onPressed: () => scanQr(),
-        child: const Icon(Icons.camera),
+        child: const Icon(Icons.qr_code_scanner_outlined),
       ),
     );
   }
