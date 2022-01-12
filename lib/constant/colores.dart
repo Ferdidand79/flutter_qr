@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
 
-Color primaryTextColor = Color(0xFF1b9eb5);
-Color secondaryTextColor = Color(0xFF099bc4);
-Color titleTextoSCUROColor = Color(0xFF18A491);
+Color primaryTextColor = Color(0xFFB11F24);
+Color secondaryTextColor = Color(0xFFF49C00);
+Color titleTextoSCUROColor = Color(0xFFFFFFFF);
