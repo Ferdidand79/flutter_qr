@@ -48,7 +48,7 @@ class _HomeScanQRState extends State<HomeScanQR> {
           qrValue); //para inspeccion
       print("=============================");
 
-      print("este es el valor obtenido de respuesta es: " +
+      print("este es el valor obtenido de respuesta de Qres: " +
           respuesta); //para inspeccion
       print("=============================");
     } else {
