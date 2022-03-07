@@ -44,7 +44,7 @@ class _HomeScanQRState extends State<HomeScanQR> {
       this._outputController.text = camaraScanResult!;
 
       print("=============================");
-      print("este es el valor obtenido de QRValue es: " +
+      print("este es el valor obtenido de QRRValue es: " +
           qrValue); //para inspeccion
       print("=============================");
 
