@@ -24,7 +24,7 @@ class _HomeScanQRState extends State<HomeScanQR> {
     //this.qrValue;
 
     print("==============initdState===============");
-    print("este es el valor obtenido de qrValue es: " +
+    print("este es el valor obtenido de qrValue ess: " +
         qrValue); //para inspeccion
     print("=======================================");
   }
